@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="./layui/css/layui.css" media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+
+<button class="layui-btn addNewNode" data-type="child">新增一个子节点</button>
+<button class="layui-btn addNewNode" data-type="root">新增一个根节点</button>
+<a href="pages/testpage1.html">afddsaf</a>
+<ul class="layui-nav layui-nav-tree" lay-filter="nav_main" style="margin-top: 20px;"></ul>
+
+<!--原子菜单的内容-->
+<script type="text/html" id="menu-content-tpl">
+    <a href="{{d.url||'javascript:void(0);'}}" lay-href="{{d.href||''}}" {{# if(d.url) {}}
+       target="{{d.target||'_blank'}}" {{# } }}>{{d.name}}</a>
+    {{# if(d.children && d.children.length) {
+    var _html = layui.laytpl(layui.jquery('#menu-sub-tpl').html()).render(d.children); }}
+    {{_html||''}}
+    {{# } }}
+</script>
+
+<!--子菜单的模板-->
+<script type="text/html" id="menu-sub-tpl">
+    <dl class="layui-nav-child">
+        {{# layui.each(d, function(index, data) { }}
+        <dd>
+            {{# var _html = layui.laytpl(layui.jquery('#menu-content-tpl').html()).render(data); }}
+            {{_html||''}}
+        </dd>
+        {{# }); }}
+    </dl>
+</script>
+
+<!--菜单的模板-->
+<script type="text/html" id="menu-tpl">
+    {{# layui.each(d, function(index, data){ }}
+    <li class="layui-nav-item">
+        {{# var _html = layui.laytpl(layui.jquery('#menu-content-tpl').html()).render(data); }}
+        {{_html||''}}
+    </li>
+    {{# });}}
+</script>
+
+<script src="./layui/layui.js" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    layui.use(['table', 'element'], function (table, element) {
+        var laytpl = layui.laytpl,
+            $ = layui.jquery,
+            layer = layui.layer;
+
+        var navData = [
+            {
+                name: '菜单一',
+                children: [
+                    {name: '选项1', href: 'pages/testpage1.html'},
+                    {name: '选项2', href: 'page2', url: 'pages/testpage2.html'},
+                    {name: '百度', url: 'https://www.baidu.com'}
+                ]
+            },
+            {
+                name: '解决方案',
+                children: [
+                    {name: '移动模块', href: 'page21'},
+                    {
+                        name: '后台模版',
+                        children: [
+                            {name: 'layuiAdmin', url: '//www.layui.com/admin/'}
+                        ]
+                    },
+                    {name: '电商平台', href: 'page23'}
+                ]
+            },
+            {
+                name: '产品'
+            },
+            {
+                name: '大数据'
+            }
+        ];
+        var navElem = $('[lay-filter="nav_main"]');
+
+        // 默认关闭其他的折叠
+        element.on('nav(nav_main)', function (elem) {
+            // console.log(elem); //得到当前点击的DOM对象
+            // elem.parents('dd,li').siblings().removeClass('layui-nav-itemed');
+        });
+
+        navElem.html(laytpl($('#menu-tpl').html()).render(navData));
+        element.render('nav', 'nav_main');
+
+        // 默认打开的页面
+        var pageName = 'page2';
+        // 打开默认页面
+        var navCurr = navElem.find('[lay-href="' + pageName + '"]');
+        navCurr.parent().addClass('layui-this').parents('li,dl').addClass('layui-nav-itemed');
+        // 模拟点击，这个看情况不是必须的
+        navCurr.click();
+
+
+        var index = 0;
+        $('.addNewNode').click(function () {
+            var type = $(this).data('type');
+            index++;
+            var navActive = navElem.find('.layui-this');
+            if (!navActive.length && type === 'child') {
+                layer.msg('请先选择一个父节点', {anim: 6});
+                return;
+            }
+
+            if (type === 'root') {
+                // 新增到根节点
+                navElem.append('<li class="layui-nav-item"><a href="javascript:void(0);" name="node' + index + '">新增节点' + index + '</a></li>');
+            } else {
+                navActive.append('<dl class="layui-nav-child"><dd><a href="javascript:void(0);" name="node' + index + '">新增节点' + index + '</a></dd></dl>');
+                navActive.addClass('layui-nav-itemed');
+            }
+            element.render('nav', 'nav_main');
+            $('a[name="node' + index + '"]').click();
+        });
+
+    });
+</script>
+
+</body>
+</html>

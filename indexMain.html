@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>月度监测主题</title>
+  <link rel="stylesheet" href="./layui/css/layui.css">
+  <link rel="stylesheet" href="./static/css/layout.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+    <div class="layui-logo" style="width: 400px; font-size: 22px;">国网上海市电力公司月度运营监测分析</div>
+    <div class="layui-logo" style="width: 600px; left:400px;">
+      <p style="color: white;"><i class="layui-icon layui-icon-location" style="font-size: 15px;"> 指标情况 > 投资建设 > 经济效益 > 经济效益 > 电网负荷与用电情况分析</i>   
+        </p>
+    </div>
+  </div>
+  
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+      <ul class="layui-nav layui-nav-tree"  lay-filter="nav_main">
+      </ul>
+      <!--原子菜单的内容-->
+      <script type="text/html" id="menu-content-tpl">
+        <a href="javascript:void(0);" class="{{d.class||''}}" lay-url="{{d.url||''}}" lay-href="{{d.href||''}}" >{{d.name}}</a>
+        {{# if(d.children && d.children.length) {
+        var _html = layui.laytpl(layui.jquery('#menu-sub-tpl').html()).render(d.children); }}
+        {{_html||''}}
+        {{# } }}
+      </script>
+
+      <!--子菜单的模板-->
+      <script type="text/html" id="menu-sub-tpl">
+        <dl class="layui-nav-child">
+            {{# layui.each(d, function(index, data) { }}
+            <dd>
+                {{# var _html = layui.laytpl(layui.jquery('#menu-content-tpl').html()).render(data); }}
+                {{_html||''}}
+            </dd>
+            {{# }); }}
+        </dl>
+      </script>
+
+      <!--菜单的模板-->
+      <script type="text/html" id="menu-tpl">
+        {{# layui.each(d, function(index, data){ }}
+        <li class="layui-nav-item">
+            {{# var _html = layui.laytpl(layui.jquery('#menu-content-tpl').html()).render(data); }}
+            {{_html||''}}
+        </li>
+        {{# });}}
+      </script>
+    </div>
+  </div>
+  
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div id="mainRender" style="height: 100%;">
+      <iframe id="mainIframe" style="height: calc(80vh); width:100%;" 
+              src="https://www.baidu.com"></iframe>
+    </div>
+  </div>
+  
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    底部固定区域
+  </div>
+</div>
+<script src="./layui/layui.js"></script>
+<script src="./static/js/pageConfig.js"></script>
+<script src="./static/js/mainPage.js"></script>
+</body>
+</html>
