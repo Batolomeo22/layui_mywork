@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>layDate快速使用</title>
+  <link rel="stylesheet" href="../layui/css/layui.css" media="all">
+</head>
+<body>
+ 
+<div class="layui-inline"> <!-- 注意：这一层元素并不是必须的 -->
+  <input type="text" class="layui-input" id="test1">
+</div>
+ 
+<script src="../layui/layui.js"></script>
+<script>
+layui.use('laydate', function(){
+  var laydate = layui.laydate;
+  
+  //执行一个laydate实例
+  laydate.render({
+    elem: '#test1', //指定元素
+    type: 'month',
+    format: 'yyyy年MM月',
+    done: function(value, date, endDate){
+    //console.log(value); //得到日期生成的值，如：2017-08-18
+    //console.log(date); //得到日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
+    
+    let curYear = date.year;
+    let curMonth = date.month;
+    let startYear ='',startMonth = '';
+    
+    if(curMonth===1){
+        startYear = curYear-1;
+        startMonth = 12;
+    }else {
+        startYear = curYear;
+        startMonth =  curMonth-1;
+    }
+    let curYmd = ''+curYear + (curMonth<10 ? '0'+curMonth : curMonth) + '25';
+    let startYmd = ''+startYear + (startMonth<10 ? '0'+startMonth : startMonth) + '26';
+    
+    console.log('本月：'+curYmd); 
+    console.log('上月：'+startYmd);
+    console.log('--------------------------------------------')
+    
+  }
+  });
+});
+</script>
+</body>
+</html>
+      

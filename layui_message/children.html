@@ -1,0 +1,32 @@
+<html>
+    <head></head>
+    <body>
+        <div class="children" style="padding: 2em;">
+            chilren
+            <input id="lay-input">
+            <div id="lay-output" style="background-color: #fff; margin-top: 10px; min-height: 50px;"></div>
+        </div>
+    </body>
+    <script type="text/javascript" src='../layui/layui.js'></script>
+    <script type="text/javascript" src='./common.js'></script>
+    <script type="text/javascript">
+        // js
+        layui.use(['jquery','common'], function($, common) {
+        
+        console.log(top._date);
+        top._tools.func2();
+        console.log(top._date);
+        
+        var message
+
+        $('#lay-input').on('input', function() {
+            message = $(this).val()
+            common.$emit('on-children', { message: 'from children: ' + message })
+        })
+
+        common.$on('on-father', function(data) {
+            $('#lay-output').html(data.message)
+        })
+        })
+    </script>
+</html>

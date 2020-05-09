@@ -1,0 +1,41 @@
+<html>
+    <head></head>
+    <body>
+        <div class="father" style="width: 400px; padding: 2em; background-color: #ccc;">
+            father
+            <input id="lay-input">
+            <p id="lay-output" style="background-color: #fff; margin-top: 10px; min-height: 50px;"></p>
+            <iframe src="children.html" style="margin-top: 10px; border: 2px solid"></iframe>
+        </div>
+    </body>
+    <script type="text/javascript" src='../layui/layui.js'></script>
+    <script type="text/javascript" src='./common.js'></script>
+    <script type="text/javascript">
+        layui.use(['jquery','common'], function($, common) {
+        
+        var _date = [];
+        var _tools = {
+            func1: function() {
+                console.log('func1');
+            },
+            func2: function() {
+                _date.push(Math.random())
+            }
+        }
+        _tools.func1();
+        window._tools = _tools;
+        window._date = _date;
+
+        var message
+
+        $('#lay-input').on('input', function() {
+            message = $(this).val()
+            common.$emit('on-father', { message: 'from father: ' + message })
+        })
+            
+        common.$on('on-children', function(data) {
+            $('#lay-output').html(data.message)
+        })
+        })
+    </script>
+</html>
